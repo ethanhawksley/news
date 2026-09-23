@@ -10,9 +10,9 @@ const { post } = Astro.props;
 
 <li>
   <div>
-    <a href={post.url} class="title">{post.title}</a>{' '}<small class="domain"
-      >[{post.domain}]</small
-    >
+    <a href={post.url} rel="nofollow ugc" class="title">{post.title}</a>{
+      ' '
+    }<small class="domain">[{post.domain}]</small>
   </div>
   <small>
     <a href={post.comments} class="comments">Comments</a>
