@@ -4,11 +4,11 @@ import { getMonthlyArchives } from '../utils/archives';
 const archives = await getMonthlyArchives();
 ---
 
-<nav class="archives">
+<nav>
   <h2>Archives</h2>
   <ul>
     {
-      archives.map(({ yearMonth, label, days }) => {
+      archives.map(({ yearMonth, label }) => {
         const href = `/${yearMonth}`;
 
         return (
@@ -22,10 +22,6 @@ const archives = await getMonthlyArchives();
 </nav>
 
 <style>
-  .archives {
-    margin-top: 2rem;
-  }
-
   ul {
     list-style: none;
     padding: 0;
@@ -33,6 +29,10 @@ const archives = await getMonthlyArchives();
 
   li {
     margin-bottom: 0.5rem;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
   }
 
   a {
