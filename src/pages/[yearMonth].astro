@@ -1,20 +1,29 @@
 ---
-import { getCollection } from 'astro:content';
-
 import Layout from '../layouts/Layout.astro';
 import ArchiveList from '../components/ArchiveList.astro';
 import DayDisplay from '../components/DayDisplay.astro';
 
-const days = await getCollection('days');
-const descendingDays = days.toSorted((a, b) =>
-  b.data.date.localeCompare(a.data.date),
-);
-const fiveLatestDays = descendingDays.slice(0, 5);
+import { getMonthlyArchives } from '../utils/archives';
+
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+
+export const getStaticPaths = (async () => {
+  const archives = await getMonthlyArchives();
+
+  return archives.map(({ yearMonth, days }) => ({
+    params: { yearMonth },
+    props: { days },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { days } = Astro.props;
 ---
 
 <Layout title="News" description="Hacker News and Lobsters daily aggregator">
   <h1><a href="/">News</a></h1>
-  {fiveLatestDays.map((day) => <DayDisplay day={day} />)}
+  {days.map((day) => <DayDisplay day={day} />)}
 
   <ArchiveList />
 

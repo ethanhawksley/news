@@ -1,0 +1,42 @@
+---
+import { getMonthlyArchives } from '../utils/archives';
+
+const archives = await getMonthlyArchives();
+---
+
+<nav class="archives">
+  <h2>Archives</h2>
+  <ul>
+    {
+      archives.map(({ yearMonth, label, days }) => {
+        const href = `/${yearMonth}`;
+
+        return (
+          <li>
+            <a href={href}>{label}</a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<style>
+  .archives {
+    margin-top: 2rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+</style>
