@@ -86,6 +86,8 @@ lobstersPosts = lobstersPosts
 
 const todayHnPosts = [];
 for (const post of hnPosts) {
+  if (!post.url || !post.title || !post.objectID) continue;
+
   if (!previousUrls.has(post.url)) {
     previousUrls.add(post.url);
 
@@ -93,7 +95,7 @@ for (const post of hnPosts) {
       url: post.url,
       title: post.title,
       domain: getDomain(post.url),
-      comments: `https://news.ycombinator.com/item?id=${post.story_id}`,
+      comments: `https://news.ycombinator.com/item?id=${post.objectID}`,
     });
 
     if (todayHnPosts.length === 10) {
@@ -104,6 +106,8 @@ for (const post of hnPosts) {
 
 const todayLobstersPosts = [];
 for (const post of lobstersPosts) {
+  if (!post.url || !post.title || !post.comments_url) continue;
+
   if (!previousUrls.has(post.url)) {
     previousUrls.add(post.url);
 
