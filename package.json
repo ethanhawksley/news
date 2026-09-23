@@ -1,0 +1,31 @@
+{
+  "name": "news",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format:css": "stylelint \"src/**/*.{astro,css}\" --fix",
+    "format": "prettier --write . && pnpm run format:css"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/ts-plugin": "^1.10.12",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "astro": "^7.3.4",
+    "astro-compress": "^2.4.3",
+    "postcss-html": "^1.8.1",
+    "prettier": "3.8.3",
+    "prettier-plugin-astro": "0.14.1",
+    "stylelint": "^17.15.0",
+    "stylelint-config-recess-order": "^7.8.0",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.136.3"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@12.5.1+sha512.e3f305bc784a2bc89f5ad3b6138889470fae8d2af5f36b61216ec91c2c3d64089775f9de38aac331044ea40f245cb0d5666392dfdf65824e1907ef6a2c62de5f"
+}

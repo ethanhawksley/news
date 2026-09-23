@@ -1,0 +1,24 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import PostPreview from './PostPreview.astro';
+
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  day: CollectionEntry<'days'>;
+}
+
+const { day } = Astro.props;
+---
+
+<h2>
+  <FormattedDate date={new Date(day.data.date)} />
+</h2>
+<h3>Hacker News</h3>
+<ul>
+  {day.data.hn.map((post) => <PostPreview post={post} />)}
+</ul>
+<h3>Lobsters</h3>
+<ul>
+  {day.data.lobsters.map((post) => <PostPreview post={post} />)}
+</ul>

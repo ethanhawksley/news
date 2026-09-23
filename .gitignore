@@ -1,0 +1,27 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains settings directory
+.idea/
+
+# vscode settings directory
+.vscode/
+
+# git commit sha tracker
+public/version.txt

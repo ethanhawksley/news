@@ -1,0 +1,114 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  build-deploy-notify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Write version file
+        run: echo "${{ github.sha }}" > public/version.txt
+
+      - name: Setup pnpm
+        uses: pnpm/setup@v2
+        with:
+          cache: true
+
+      - name: Cache assets
+        uses: actions/cache@v6
+        with:
+          path: node_modules/.astro
+          key: astro-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'astro.config.mjs') }}-${{ github.sha }}
+          restore-keys: |
+            astro-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'astro.config.mjs') }}-
+
+      - name: Build Astro site
+        run: pnpm run build
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler pages deploy dist --project-name=hawksley --commit-dirty=true
+
+      - name: Immediately purge Cloudflare Zone cache
+        run: |
+          curl -sSf \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"purge_everything":true}' \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache"
+
+      - name: Wait for origin to serve new deployment
+        run: |
+          TARGET_SHA="${{ github.sha }}"
+          MAX_ATTEMPTS=60
+          INTERVAL=2
+
+          echo "Polling https://hawksley.dev/version.txt for $TARGET_SHA"
+
+          for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+            CACHE_BUSTER=$(openssl rand -hex 16)
+            CURRENT_SHA=$(curl -sSfL "https://hawksley.dev/version.txt?cb=${CACHE_BUSTER}" 2>/dev/null || echo "")
+            CURRENT_SHA=$(echo "$CURRENT_SHA" | tr -d '[:space:]')
+            if [ "$CURRENT_SHA" = "$TARGET_SHA" ]; then
+              echo "Site is serving the new version after $attempt attempt(s)."
+              echo "Waiting 10s for global propagation."
+              sleep 10
+              exit 0
+            fi
+            echo "Attempt $attempt/$MAX_ATTEMPTS: site is still on the old version. Retrying in ${INTERVAL}s."
+            sleep "$INTERVAL"
+          done
+
+          echo "::warning::Site didn't update within $((MAX_ATTEMPTS * INTERVAL))s."
+          exit 1
+
+      - name: Purge Cloudflare Zone cache once it is definitely fine.
+        run: |
+          curl -sSf \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"purge_everything":true}' \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache"
+
+      - name: Submit sitemap to IndexNow
+        run: |
+          URL_JSON=$(jq -R -s -c 'split("\n") | map(select(length > 0))' dist/sitemap.txt)
+
+          curl -sSf \
+            -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{
+              \"host\": \"hawksley.dev\",
+              \"key\": \"${{ secrets.INDEXNOW_KEY }}\",
+              \"keyLocation\": \"https://hawksley.dev/${{ secrets.INDEXNOW_KEY }}.txt\",
+              \"urlList\": $URL_JSON
+            }"
+
+      - name: Notify profile README repo
+        run: |
+          curl -sSf \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.NOTIFY_README_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/ethanhawksley/ethanhawksley/dispatches" \
+            -d '{"event_type": "site_deployed"}'

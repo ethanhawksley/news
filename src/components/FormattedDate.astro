@@ -1,0 +1,33 @@
+---
+interface Props {
+  date: Date;
+}
+const { date } = Astro.props;
+
+function getOrdinalSuffix(num: number) {
+  if ([11, 12, 13].includes(num % 100)) return 'th';
+  if (num % 10 === 1) return 'st';
+  if (num % 10 === 2) return 'nd';
+  if (num % 10 === 3) return 'rd';
+  return 'th';
+}
+
+const daysOfWeek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+const dayOfWeek = daysOfWeek[date.getUTCDay()];
+const dayOfMonth = date.getUTCDate();
+const suffix = getOrdinalSuffix(dayOfMonth);
+const formatted = `${dayOfWeek}, ${dayOfMonth}${suffix} ${date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' })}`;
+---
+
+<time datetime={date.toISOString().split('T')[0]}>
+  {formatted}
+</time>
