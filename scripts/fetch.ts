@@ -133,7 +133,3 @@ const jsonData = {
 const jsonString = JSON.stringify(jsonData);
 
 fs.writeFileSync(`src/content/days/${todayDate}.json`, jsonString);
-
-console.log(previousUrls);
-console.log(todayHnPosts, todayHnPosts.length);
-console.log(todayLobstersPosts, todayLobstersPosts.length);
