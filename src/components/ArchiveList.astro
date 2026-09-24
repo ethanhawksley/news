@@ -1,6 +1,12 @@
 ---
 import { getMonthlyArchives } from '../utils/archives';
 
+interface Props {
+  currentYearMonth?: string;
+}
+
+const { currentYearMonth } = Astro.props;
+
 const archives = await getMonthlyArchives();
 ---
 
@@ -11,11 +17,21 @@ const archives = await getMonthlyArchives();
       archives.map(({ yearMonth, label }) => {
         const href = `/${yearMonth}`;
 
-        return (
-          <li>
-            <a href={href}>{label}</a>
-          </li>
-        );
+        if (yearMonth === currentYearMonth) {
+          return (
+            <li>
+              <a href={href} aria-current="page">
+                {label}
+              </a>
+            </li>
+          );
+        } else {
+          return (
+            <li>
+              <a href={href}>{label}</a>
+            </li>
+          );
+        }
       })
     }
   </ul>
@@ -38,5 +54,9 @@ const archives = await getMonthlyArchives();
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  a[aria-current='page'] {
+    font-style: italic;
   }
 </style>

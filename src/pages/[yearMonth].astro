@@ -10,22 +10,25 @@ import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
 export const getStaticPaths = (async () => {
   const archives = await getMonthlyArchives();
 
-  return archives.map(({ yearMonth, days }) => ({
+  return archives.map(({ yearMonth, label, days }) => ({
     params: { yearMonth },
-    props: { days },
+    props: { yearMonth, label, days },
   }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { days } = Astro.props;
+const { yearMonth, label, days } = Astro.props;
 ---
 
-<Layout title="News" description="Hacker News and Lobsters daily aggregator">
+<Layout
+  title=`News - ${label}`
+  description=`Hacker News and Lobsters archive for ${label}`
+>
   <h1><a href="/">News</a></h1>
   {days.map((day) => <DayDisplay day={day} />)}
 
-  <ArchiveList />
+  <ArchiveList currentYearMonth={yearMonth} />
 
   <div>
     <p>
