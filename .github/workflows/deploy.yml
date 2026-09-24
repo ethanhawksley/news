@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   workflow_run:
-    workflows: ["Update with latest posts"]
+    workflows: ['Update with latest posts']
     types: [completed]
     branches: [main]
 
