@@ -27,7 +27,12 @@ const { days } = Astro.props;
 
   <ArchiveList />
 
-  <p>By <a href="https://hawksley.dev/">Ethan Hawksley</a></p>
+  <div>
+    <p>
+      By <a href="https://hawksley.dev/">Ethan Hawksley</a>
+    </p>
+    <p><a href="https://github.com/ethanhawksley/news">GitHub</a></p>
+  </div>
 </Layout>
 
 <style>
@@ -36,9 +41,9 @@ const { days } = Astro.props;
     text-decoration: none;
   }
 
-  p {
+  div {
     padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
     line-height: var(--leading-normal);
+    border-top: 1px solid var(--color-border);
   }
 </style>
