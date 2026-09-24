@@ -8,6 +8,8 @@
 - Updates daily
 - Permanent archive of previous days, sorted by month
 - Lightweight to load
+- Dark mode with WCAG AAA contrast.
+- No FOUC
 
 ## Running Locally
 
