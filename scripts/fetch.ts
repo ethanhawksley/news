@@ -44,7 +44,7 @@ const timestampInSeconds = Math.floor(Date.now() / 1000);
 const timestamp48HoursAgoInSeconds = timestampInSeconds - 60 * 60 * 24 * 2;
 
 const hnResponse = await fetch(
-  `https://hn.algolia.com/api/v1/search?tags=story&hitsPerPage=25&numericFilters=created_at_i%3E${timestamp48HoursAgoInSeconds}`,
+  `https://hn.algolia.com/api/v1/search?tags=story&hitsPerPage=50&numericFilters=created_at_i%3E${timestamp48HoursAgoInSeconds}`,
 );
 const hnJson = await hnResponse.json();
 
