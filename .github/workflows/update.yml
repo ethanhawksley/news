@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  update-profile:
+  update-posts:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
