@@ -54,14 +54,19 @@ const timestamp48HoursAgoInSeconds = timestampInSeconds - 60 * 60 * 24 * 2;
 
 const hnResponse = await fetch(
   `https://hn.algolia.com/api/v1/search?tags=story&hitsPerPage=50&numericFilters=created_at_i%3E${timestamp48HoursAgoInSeconds}`,
+  { headers: { 'User-Agent': 'news.hawksley.dev aggregator' } },
 );
 const hnJson = await hnResponse.json();
 
 const hnPosts: any[] = hnJson.hits;
 
-const lobstersResponse1 = await fetch('https://lobste.rs/hottest.json');
+const lobstersResponse1 = await fetch('https://lobste.rs/hottest.json', {
+  headers: { 'User-Agent': 'news.hawksley.dev aggregator' },
+});
 const lobstersPosts1 = await lobstersResponse1.json();
-const lobstersResponse2 = await fetch('https://lobste.rs/hottest.json?page=2');
+const lobstersResponse2 = await fetch('https://lobste.rs/hottest.json?page=2', {
+  headers: { 'User-Agent': 'news.hawksley.dev aggregator' },
+});
 const lobstersPosts2 = await lobstersResponse2.json();
 
 let lobstersPosts = [...lobstersPosts1, ...lobstersPosts2];
