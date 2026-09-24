@@ -1,79 +1,35 @@
-# hawksley.dev
+# News
 
-**[Ethan Hawksley's portfolio & blog](https://hawksley.dev)**
+**[news.hawksley.dev](https://news.hawksley.dev)**
 
 ## Features
 
-- JS-free by default, progressively enhanced
-- 100/100 Google PageSpeed score
-- Light/dark mode, zero FOUC
-- JSON-LD structured data on every page
-- Automatic OG image generation
-- Full-content RSS and JSON feeds
-
-## Tech Stack
-
-| Tool          | Purpose                                                                     |
-| ------------- | --------------------------------------------------------------------------- |
-| Astro         | Has excellent performance and SEO with a no-JS-by-default approach          |
-| pnpm          | Fast package manager that reduces node_modules bloat through symlinks       |
-| Zod           | Ensures all posts and projects have appropriate metadata before publication |
-| AstroCompress | Minifies the built assets                                                   |
-| Marked        | Converts Markdown to HTML for the RSS and JSON feeds                        |
-| Satori        | Renders custom OG images as SVGs                                            |
-| resvg-js      | Converts OG image SVGs to PNGs                                              |
-| Sharp         | Finally converts OG image PNGs to compressed JPEGs                          |
+- Shows the top 10 Hacker News and the top 5 Lobsters posts
+- Updates daily
+- Permanent archive of previous days, sorted by month
+- Lightweight to load
 
 ## Running Locally
 
 Requires [Node.js 22+](https://nodejs.org) and [pnpm](https://pnpm.io).
 
 ```shell
-git clone https://github.com/ethanhawksley/hawksley.dev
-cd hawksley.dev
+git clone https://github.com/ethanhawksley/news
+cd news
 pnpm install
 pnpm run dev
 ```
 
 Then open `http://localhost:4321` in your browser.
 
-## Subset Fonts
+To fetch the day's posts:
 
-The site uses a subsetted version of the IBM Plex Sans and Mono fonts for increased performance. These are both available for download on Google Fonts.
+```shell
+node scripts/fetch.ts
+```
 
-To subset:
+It will output the day's posts into a YYYY-MM-DD.json file in `src/content/days/`
 
-- Install fonttools
-  - `sudo dnf install fonttools`
-  - `sudo apt install fonttools`
-- Download ibm-plex-sans.ttf and ibm-plex-mono.ttf from Google Fonts
-- Place both in the project root
-- Run `bash scripts/subset-fonts.sh`
-- Generated fonts will be placed in `public/fonts`
+## License
 
-## Generate Derivative Images
-
-The site uses many derivates of the `src/assets/ethan-hawksley.png` photo. It is transcoded and compressed to various other formats and sizes.
-
-To generate them:
-
-- Install ImageMagick and libavif-tools
-  - `sudo dnf install libavif-tools libwebp-tools ImageMagick`
-  - `sudo apt install libavif-bin webp imagemagick`
-- You will also need to install `cjpegli`, which may require building `jpegli` from source
-- Run `bash scripts/generate-assets.sh`
-- Derivative assets will be placed within `public` and `src/assets`
-
-## Licenses
-
-Thanks to Lucide and Tabler for their icons.
-
-Code and all blog code snippets are licensed under MIT.
-
-Blog posts, descriptions, and documentation are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-
-The book "The Second Maintainer", its associated assets, and the files `/public/ethan-hawksley.png`, `/public/ethan-hawksley.jpg`, `/public/ethan-hawksley.webp`, `/public/ethan-hawksley.avif`, `/src/assets/ethan-hawksley.png`, and `/src/assets/ethan-hawksley-320.avif` are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
-
-Other personal branding, logos, and photographs are All Rights Reserved. Please remove these if you fork the repository.
-
-The full criteria for each is explained in the [LICENSE](LICENSE) additional terms.
+(MIT)[LICENSE]
