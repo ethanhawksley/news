@@ -1,5 +1,14 @@
 import fs from 'node:fs';
 
+const todayDate = new Date().toISOString().split('T')[0];
+const todayFile = `src/content/days/${todayDate}.json`;
+const force = process.argv.includes('--force');
+
+if (fs.existsSync(todayFile) && !force) {
+  console.warn('today already exists, exiting.');
+  process.exit();
+}
+
 const bareUsernameDomains = new Set([
   'github.com',
   'codeberg.org',
@@ -57,12 +66,14 @@ const lobstersPosts2 = await lobstersResponse2.json();
 
 let lobstersPosts = [...lobstersPosts1, ...lobstersPosts2];
 
-const days = fs.readdirSync('src/content/days');
+const dayFiles = fs.readdirSync('src/content/days');
 const previousUrls = new Set();
 
-for (const day of days) {
+for (const dayFile of dayFiles) {
+  if (dayFile === `${todayDate}.json`) continue;
+
   const fileContent = JSON.parse(
-    fs.readFileSync(`src/content/days/${day}`, 'utf-8'),
+    fs.readFileSync(`src/content/days/${dayFile}`, 'utf-8'),
   );
 
   for (const story of fileContent.hn) {
@@ -126,8 +137,6 @@ for (const post of lobstersPosts) {
 
 shuffleArray(todayHnPosts);
 shuffleArray(todayLobstersPosts);
-
-const todayDate = new Date().toISOString().split('T')[0];
 
 const jsonData = {
   date: todayDate,
