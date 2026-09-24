@@ -2,7 +2,7 @@ name: Update with latest posts
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '37 3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Fetch feed and update README
+      - name: Fetch latest top posts
         run: node scripts/fetch.ts
 
       - name: Commit and push if changed
