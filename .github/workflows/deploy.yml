@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Update with latest posts"]
+    types: [completed]
+    branches: [main]
 
 concurrency:
   group: pages
@@ -14,11 +18,16 @@ permissions: {}
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: main
 
       - name: Install, build, and upload site
         uses: withastro/action@v6
