@@ -96,7 +96,13 @@ lobstersPosts = lobstersPosts
     const creationTimestampInSeconds = Math.floor(
       new Date(post.created_at).getTime() / 1000,
     );
-    return creationTimestampInSeconds > timestamp48HoursAgoInSeconds;
+    const isYoungerThan48HoursOld =
+      creationTimestampInSeconds > timestamp48HoursAgoInSeconds;
+
+    const isAiTopic =
+      post.tags.includes('ai') || post.tags.includes('vibecoding');
+
+    return isYoungerThan48HoursOld && !isAiTopic;
   })
   .sort((a, b) => b.score - a.score);
 
