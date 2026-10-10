@@ -34,4 +34,4 @@ It will output the day's posts into a YYYY-MM-DD.json file in `src/content/days/
 
 ## License
 
-(MIT)[LICENSE]
+[MIT](LICENSE)
