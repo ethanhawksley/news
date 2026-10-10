@@ -1,6 +1,8 @@
 # News
 
-**[news.hawksley.dev](https://news.hawksley.dev)**
+[news.hawksley.dev](https://news.hawksley.dev) is a daily news aggregator for Hacker News and Lobsters, built using Node.js and Astro.
+
+![Screenshot of news.hawksley.dev](readme-preview.png)
 
 ## Features
 
