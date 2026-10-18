@@ -60,18 +60,11 @@ const hnJson = await hnResponse.json();
 
 const hnPosts: any[] = hnJson.hits;
 
-let lobstersPosts = [];
+const lobstersResponse = await fetch('https://lobste.rs/hottest.json', {
+  headers: { 'User-Agent': 'news.hawksley.dev aggregator' },
+});
 
-for (let i = 1; i <= 4; i++) {
-  const lobstersResponse = await fetch(
-    `https://lobste.rs/hottest.json?page=${i}`,
-    {
-      headers: { 'User-Agent': 'news.hawksley.dev aggregator' },
-    },
-  );
-  const lobstersPage = await lobstersResponse.json();
-  lobstersPosts.push(...lobstersPage);
-}
+let lobstersPosts = await lobstersResponse.json();
 
 const dayFiles = fs.readdirSync('src/content/days');
 const previousUrls = new Set();
