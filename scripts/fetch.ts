@@ -94,10 +94,12 @@ lobstersPosts = lobstersPosts
     const isYoungerThan48HoursOld =
       creationTimestampInSeconds > timestamp48HoursAgoInSeconds;
 
-    const isAiTopic =
-      post.tags.includes('ai') || post.tags.includes('vibecoding');
+    const isFilteredTopic =
+      post.tags.includes('ai') ||
+      post.tags.includes('vibecoding') ||
+      post.tags.includes('meta');
 
-    return isYoungerThan48HoursOld && !isAiTopic;
+    return isYoungerThan48HoursOld && !isFilteredTopic;
   })
   .sort((a, b) => b.score - a.score);
 
