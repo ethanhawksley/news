@@ -1,6 +1,6 @@
 # News
 
-[news.hawksley.dev](https://news.hawksley.dev) is a daily news aggregator for Hacker News and Lobsters, built using Node.js and Astro.
+[news.hawksley.dev](https://news.hawksley.dev) is a news aggregator for Hacker News and Lobsters. It updates once each day with new posts, whilst preserving the posts from previous days.
 
 ![Screenshot of news.hawksley.dev](readme-preview.png)
 
@@ -33,6 +33,12 @@ node scripts/fetch.ts
 ```
 
 It will output the day's posts into a YYYY-MM-DD.json file in `src/content/days/`
+
+## Background Info
+
+This project was created as a way to prevent me from checking in on Hacker News and Lobsters throughout the day. By having a page that only updates daily, it removes the reason to check more than once a day.
+
+It was created with Astro and Node.js, with some design inspiration from my [personal website](https://hawksley.dev).
 
 ## License
 
