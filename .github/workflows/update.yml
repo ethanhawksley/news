@@ -3,6 +3,10 @@ name: Update with latest posts
 on:
   workflow_dispatch:
 
+concurrency:
+  group: update-posts
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -12,6 +16,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+
+          fetch-depth: 0
 
       - name: Fetch latest top posts
         run: node scripts/fetch.ts
@@ -21,4 +28,8 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add src/content/days/
-          git diff --staged --quiet || (git commit -m "chore: fetch today's posts" && git push)
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: fetch today's posts"
+            git pull --rebase origin main
+            git push origin main
+          fi
